@@ -39,8 +39,8 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        python conan/profile.py ${{matrix.compiler}} ${{matrix.compiler_version}}
-        python conan/install.py ${{env.BUILD_TYPE}} ${{matrix.compiler}}${{matrix.compiler_version}}
+        python conan/profile.py "${{matrix.compiler}}" "${{matrix.compiler_version}}"
+        python conan/install.py ${{env.BUILD_TYPE}} "${{matrix.compiler}}${{matrix.compiler_version}}"
 
     - name: Configure
       run: cmake -G Ninja -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{github.workspace}}/build/${{env.BUILD_TYPE}} -S . 

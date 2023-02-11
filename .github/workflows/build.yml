@@ -19,7 +19,7 @@ jobs:
             compiler_version: 14
             
           - os: macos-12
-            compiler: "clang"
+            compiler: "apple-clang"
             compiler_version: 14
     
     runs-on: ${{ matrix.os }}

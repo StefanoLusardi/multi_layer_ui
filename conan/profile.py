@@ -34,10 +34,10 @@ def conan_profile_update(profile_path, args):
     command = ([ 'conan', 'profile', 'update', f'conf.tools.cmake.cmaketoolchain:generator=Ninja', f'{profile_path}'])
     run(command)
 
-    command = ([ 'conan', 'profile', 'update', f'tools.system.package_manager:mode=install', f'{profile_path}'])
+    command = ([ 'conan', 'profile', 'update', f'conf.tools.system.package_manager:mode=install', f'{profile_path}'])
     run(command)
     
-    command = ([ 'conan', 'profile', 'update', f'tools.system.package_manager:sudo=True', f'{profile_path}'])
+    command = ([ 'conan', 'profile', 'update', f'conf.tools.system.package_manager:sudo=True', f'{profile_path}'])
     run(command)
     
     if args.compiler == 'gcc' or args.compiler == 'clang':

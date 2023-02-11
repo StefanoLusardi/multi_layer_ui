@@ -85,38 +85,11 @@ void ExampleApp::UpdateUi()
 
         ImGui::Begin("MainWindow", NULL, main_window_flags);
 
-        ImDrawList* draw_list = ImGui::GetWindowDrawList();
-        draw_list->AddRect(ImVec2(0, 0), ImVec2(300, 300), ImColor(0, 255, 0));
-
         for (auto&& [layer_name, layer] : _ui_layers)
             layer->UpdateUI();
 
         ImGui::End();
     }
-
-/*
-    {
-        static ImGuiWindowFlags ui_info_flags =
-            ImGuiWindowFlags_NoDecoration |
-            ImGuiWindowFlags_AlwaysAutoResize |
-            ImGuiWindowFlags_NoSavedSettings |
-            ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoNav |
-            ImGuiWindowFlags_NoFocusOnAppearing;
-
-        const float PAD = 10.0f;
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        const auto window_pos = ImVec2{ viewport->WorkSize.x - PAD, viewport->WorkSize.y - PAD };
-        const auto window_pos_pivot = ImVec2{ 1.0f, 1.0f };
-        ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-        ImGui::SetNextWindowBgAlpha(0.2f);
-
-        ImGui::Begin("UI Info", nullptr, ui_info_flags);
-        ImGui::Text("%.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
-        ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
-        ImGui::End();
-    }
-*/
 }
 
 } // namespace app

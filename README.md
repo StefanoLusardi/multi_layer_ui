@@ -1,32 +1,59 @@
 # multi layer ui
 
-Proof of concept for a cross-platform, multi-layered UI, made in C++ with ImGui, Conan and CMake.
+Proof of concept for a cross-platform, multi-layered UI, made in C++ with ImGui, CMake, Ninja and Conan.
 
 ---
 
 ## Pre requisites
-- CMake
 - Python3
-- Ninja
 - MSVC (on Windows), GCC or Clang (on Linux/Mac)
 
-## Setup Conan
+## Setup CMake, Ninja and Conan
 ```bash
 pip install conan
+pip install cmake
+pip install ninja
 ```
 
 ## Configure Dependencies
+- Create Conan profile for the current environment and choosen compiler
 ```bash
-./conan/run_conan.sh <Debug|Release> <gcc|clang> <COMPILER_MAJOR_VERSION> # Linux/Mac
-conan\run_conan.bat <Debug|Release> # Windows
+python conan/profile.py <COMPILER_NAME> <COMPILER_VERSION>
+
+# Example: clang 15
+python conan/profile.py clang 15 
+# This will create a conan profile file under conan/profiles/clang15
+
+# Example: gcc 12
+python conan/profile.py gcc 12
+# This will create a conan profile file under conan/profiles/gcc12
+```
+
+- Install packages for the given conan profile and build configuration (Debug or Release)
+```bash
+python conan/install.py <Debug|Release> <PROFILE>
+
+# Example: Release with gcc12 profile
+python conan/install.py Release gcc12
+
+# Example: Debug with gcc12 profile
+python conan/install.py Debug clang15
 ```
 
 ## Configure Project
 ```bash
-cmake -G Ninja -D CMAKE_BUILD_TYPE=<Debug|Release> -B ./build/<Debug|Release> -S .
+# Debug
+cmake -G Ninja -D CMAKE_BUILD_TYPE=Debug -B ./build/Debug -S .
+
+# Release
+cmake -G Ninja -D CMAKE_BUILD_TYPE=Release -B ./build/Release -S .
 ```
 
 ## Build Project
 ```bash
-cmake --build ./build/<Debug|Release> --config <Debug|Release>
+# Debug
+cmake --build ./build/Debug --config Debug
+
+# Release
+cmake --build ./build/Release --config Release
 ```

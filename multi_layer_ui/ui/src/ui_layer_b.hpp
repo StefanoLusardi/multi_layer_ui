@@ -3,7 +3,6 @@
 #include "ui_layer.hpp"
 #include <imgui.h>
 
-
 namespace app
 {
 class ui_layer_b : public ui_layer
@@ -14,19 +13,19 @@ public:
 
     void UpdateUI() override
     {
-		// ImGui::Begin("Layer B");
-		// ImGui::Button("Button");
-		// ImGui::End();
-
         ImDrawList* draw_list = ImGui::GetWindowDrawList();
-        const float size = 200;
-        static ImVec4 rgba_color = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
-        const ImU32 color = ImColor(rgba_color);
-        auto window_center_w = ImGui::GetWindowWidth() * 0.7f;
-        auto window_center_h = ImGui::GetWindowHeight() * 0.7f;
+        const ImU32 color = ImColor(0, 255, 0);
 
-        // draw_list->AddRect(ImVec2(window_center_w, window_center_h), ImVec2(window_center_w+size, window_center_h+size), color);
-        // draw_list->AddRect(ImVec2(size, size), ImVec2(size*2, size*2), color);
+        for (auto&& rect : _data->rect_list)
+        {
+            auto x = rect.x;
+            auto y = rect.y;
+            auto w = rect.w;
+            auto h = rect.h;
+
+            draw_list->AddRect(ImVec2(x, y), ImVec2(x+w, y+h), color);
+            draw_list->AddText(ImVec2(x + w*0.5f, y + h*0.5f), color, _data->text.c_str());
+        }
     }
 };
 

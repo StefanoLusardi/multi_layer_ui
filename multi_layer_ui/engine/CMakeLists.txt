@@ -13,11 +13,5 @@ add_library(${TARGET_NAME} STATIC
 	src/module_b.hpp
 )
 
+target_compile_features(${TARGET_NAME} PUBLIC cxx_std_17)
 target_include_directories(${TARGET_NAME} PUBLIC include)
-
-#[[
-find_package(Poco)
-target_link_libraries(${TARGET_NAME}
-	PRIVATE Poco::Poco
-)
-]]

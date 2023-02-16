@@ -15,15 +15,18 @@ jobs:
       matrix:
         include:
           - os: windows-2022
-            compiler: "Visual Studio"
+            cc: "Visual Studio"
+            cxx: "Visual Studio"
             compiler_version: 2022
             
           - os: ubuntu-22.04
-            compiler: "clang"
+            cc: "clang"
+            cxx: "clang"
             compiler_version: 14
             
           - os: macos-12
-            compiler: "clang"
+            cc: "clang"
+            cxx: "clang"
             compiler_version: 14
     
     runs-on: ${{ matrix.os }}
@@ -43,12 +46,34 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        python conan/profile.py ${{matrix.compiler}} ${{matrix.compiler_version}}
-        python conan/install.py ${{env.BUILD_TYPE}} ${{matrix.compiler}}${{matrix.compiler_version}}
+        python conan/profile.py ${{matrix.cc}} ${{matrix.compiler_version}}
+        python conan/install.py ${{env.BUILD_TYPE}} ${{matrix.cc}}${{matrix.compiler_version}}
 
     - name: Configure
-      run: cmake -G Ninja -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{github.workspace}}/build/${{env.BUILD_TYPE}} -S . 
+      if: "!contains(${{ matrix.os }}, 'windows')"
+      env:
+        CC: ${{ matrix.cc }}
+        CXX: ${{ matrix.cxx }}
+      run: |
+        cmake -G Ninja -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{github.workspace}}/build/${{env.BUILD_TYPE}} -S . 
+
+    - name: Configure
+      if: "contains(${{ matrix.os }}, 'windows')"
+      run: |
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        cmake -G Ninja -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{github.workspace}}/build/${{env.BUILD_TYPE}} -S . 
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build/${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
+      if: "!contains(${{ matrix.os }}, 'windows')"
+      env:
+        CC: ${{ matrix.cc }}
+        CXX: ${{ matrix.cxx }}
+      run: |
+        cmake --build ${{github.workspace}}/build/${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
+
+    - name: Build
+      if: "contains(${{ matrix.os }}, 'windows')"
+      run: |
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        cmake --build ${{github.workspace}}/build/${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
     

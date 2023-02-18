@@ -46,10 +46,18 @@ jobs:
         python conan/install.py ${{env.BUILD_TYPE}} ${{matrix.cc}}${{matrix.compiler_version}}
 
     - name: Configure
-      if: ${{ !contains(matrix.os, 'windows') }}
+      if: ${{ contains(matrix.os, 'ubuntu') }}
       env:
         CC: ${{ matrix.cc }}
         CXX: ${{ matrix.cxx }}
+      run: |
+        cmake -G Ninja -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{github.workspace}}/build/${{env.BUILD_TYPE}} -S . 
+
+    - name: Configure
+      if: ${{ contains(matrix.os, 'macos') }}
+      env:
+        CC: clang
+        CXX: clang++
       run: |
         cmake -G Ninja -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{github.workspace}}/build/${{env.BUILD_TYPE}} -S . 
 
@@ -60,10 +68,18 @@ jobs:
         cmake -G Ninja -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{github.workspace}}/build/${{env.BUILD_TYPE}} -S . 
 
     - name: Build
-      if: ${{ !contains(matrix.os, 'windows') }}
+      if: ${{ contains(matrix.os, 'ubuntu') }}
       env:
         CC: ${{ matrix.cc }}
         CXX: ${{ matrix.cxx }}
+      run: |
+        cmake --build ${{github.workspace}}/build/${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
+   
+    - name: Build
+      if: ${{ contains(matrix.os, 'macos') }}
+      env:
+        CC: clang
+        CXX: clang++
       run: |
         cmake --build ${{github.workspace}}/build/${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
 

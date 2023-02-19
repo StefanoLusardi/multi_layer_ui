@@ -63,11 +63,10 @@ jobs:
 
     - name: Configure
       if: contains(matrix.os, 'windows')
-      env:
-        CC: cl
-        CXX: cl
       run: |
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        set CC=cl
+        set CXX=cl
         cmake -G Ninja -D CMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -B ${{github.workspace}}/build/${{env.BUILD_TYPE}} -S . 
 
     - name: Build
@@ -88,10 +87,9 @@ jobs:
 
     - name: Build
       if: contains(matrix.os, 'windows')
-      env:
-        CC: cl
-        CXX: cl
       run: |
         "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+        set CC=cl
+        set CXX=cl
         cmake --build ${{github.workspace}}/build/${{env.BUILD_TYPE}} --config ${{env.BUILD_TYPE}}
     

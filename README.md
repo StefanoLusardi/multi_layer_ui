@@ -1,6 +1,8 @@
-# multi layer ui
+# Multi Layer UI
 
 Proof of concept for a cross-platform, multi-layered UI, made in C++ with ImGui, CMake, Ninja and Conan.
+
+[![Multi Layer UI](https://github.com/StefanoLusardi/multi_layer_ui/actions/workflows/build.yml/badge.svg)](https://github.com/StefanoLusardi/multi_layer_ui/actions/workflows/build.yml)
 
 ---
 
